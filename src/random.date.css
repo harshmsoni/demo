@@ -1,0 +1,48 @@
+.App {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  h1 {
+    font-size: 24px;
+  }
+  
+  button {
+    margin-top: 20px;
+  }
+  
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal form {
+    background-color: white;
+    padding: 20px;
+  }
+  
+  .modal form div {
+    margin-bottom: 10px;
+  }
+  
+  .modal form label {
+    display: block;
+  }
+  
+  .modal form input,
+  .modal form textarea {
+    width: 100%;
+    padding: 5px;
+  }
+  
+  .modal form button {
+    margin-top: 10px;
+  }
+  
