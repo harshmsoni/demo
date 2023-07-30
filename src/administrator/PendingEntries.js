@@ -48,29 +48,35 @@ const PendingEntries = () => {
 
   // Handler for saving the edited data
   const handleSave = async (entryId) => {
-    try {
-      await updateDoc(doc(fire, 'pending', entryId), editedData);
-      console.log('Entry updated');
-      setEditingEntryId(null);
-    } catch (error) {
-      console.error('Error updating entry:', error);
+    const confirmation = window.confirm('Are you sure you want to update this entry?');
+    if (confirmation) {
+      try {
+        await updateDoc(doc(fire, 'pending', entryId), editedData);
+        console.log('Entry updated');
+        setEditingEntryId(null);
+        alert('Entry updated successfully!');
+      } catch (error) {
+        console.error('Error updating entry:', error);
+      }
     }
   };
 
   // Handler for deleting an entry
   const handleDelete = async (entryId) => {
-    try {
-      await deleteDoc(doc(fire, 'pending', entryId));
-      console.log('Entry deleted');
-      // Update state after successful deletion
-      setPendingEntries((prevEntries) =>
-        prevEntries.filter((entry) => entry.id !== entryId)
-      );
-    } catch (error) {
-      console.error('Error deleting entry:', error);
+    const confirmation = window.confirm('Are you sure you want to delete this entry?');
+    if (confirmation) {
+      try {
+        await deleteDoc(doc(fire, 'pending', entryId));
+        console.log('Entry deleted');
+        // Update state after successful deletion
+        setPendingEntries((prevEntries) =>
+          prevEntries.filter((entry) => entry.id !== entryId)
+        );
+      } catch (error) {
+        console.error('Error deleting entry:', error);
+      }
     }
   };
-
   // Handler for approving an entry
   const handleApprove = async (entryId) => {
     const entryToApprove = pendingEntries.find((entry) => entry.id === entryId);

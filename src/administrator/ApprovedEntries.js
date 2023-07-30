@@ -69,15 +69,18 @@ const ApprovedEntries = () => {
 
   // Handler for deleting an approved entry
   const handleDelete = async (entryId) => {
-    try {
-      await deleteDoc(doc(fire, 'form', entryId));
-      console.log('Approved entry deleted');
-      // Update state after successful deletion
-      setApprovedEntries((prevEntries) =>
-        prevEntries.filter((entry) => entry.id !== entryId)
-      );
-    } catch (error) {
-      console.error('Error deleting approved entry:', error);
+    const confirmation = window.confirm('Are you sure you want to delete this entry?');
+    if (confirmation) {
+      try {
+        await deleteDoc(doc(fire, 'form', entryId));
+        console.log('Approved entry deleted');
+        // Update state after successful deletion
+        setApprovedEntries((prevEntries) =>
+          prevEntries.filter((entry) => entry.id !== entryId)
+        );
+      } catch (error) {
+        console.error('Error deleting approved entry:', error);
+      }
     }
   };
 

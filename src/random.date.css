@@ -1,48 +1,73 @@
+
+/* @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap'); */
+/* @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@800&display=swap');
+
+
+body {
+  margin: 0;
+  background: #EB3349;
+  background: -webkit-linear-gradient(to bottom, #F45C43, #EB3349);
+  background: linear-gradient(to bottom, #F45C43, #EB3349);
+  height: 100vh;
+  /* color: white; */
+}
+
+
+/* random.date.css */
+.DateApp {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* text-align: center; */
+  /* height: 100vh; */
+}
+
 .App {
-    text-align: center;
-    margin-top: 50px;
-  }
   
-  h1 {
-    font-size: 24px;
-  }
-  
-  button {
-    margin-top: 20px;
-  }
-  
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .modal form {
-    background-color: white;
-    padding: 20px;
-  }
-  
-  .modal form div {
-    margin-bottom: 10px;
-  }
-  
-  .modal form label {
-    display: block;
-  }
-  
-  .modal form input,
-  .modal form textarea {
-    width: 100%;
-    padding: 5px;
-  }
-  
-  .modal form button {
-    margin-top: 10px;
-  }
-  
+}
+
+.heading {
+  /* font-family: 'Pacifico', cursive; */
+  /* font-family: 'Dancing Script', cursive; */
+  font-family: 'Nanum Myeongjo', serif;
+  margin-top: 80px;
+  color: white;
+  font-size: 70px;
+  text-align: center;
+}
+
+.description {
+
+  /* font-family: 'Dancing Script', cursive; */
+  font-family: 'Lobster', cursive;
+  color: white;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  font-size: 30px;
+  max-width: 700px;
+  /* margin-left: 150px; */
+  text-align: center;
+
+}
+
+.button{
+  /* margin-left: 150px; */
+  text-align: center;
+
+}
+
+.link {
+  color: white;
+  text-align: center;
+  font-size: 20px;
+  margin-top: 100px;
+  padding-top: 100px;
+  /* text-decoration: none; */
+}
+
+.link:hover {
+  border-color: black; /* Change the link color to white on hover */
+  text-decoration: underline; 
+}

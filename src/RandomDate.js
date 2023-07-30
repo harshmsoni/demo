@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { fire } from './database/fire';
+import { Modal, Form, Navbar, Container, Button } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './random.date.css';
+import logo from "./logo.png";
 
 function RandomDate() {
   const [showForm, setShowForm] = useState(false);
@@ -15,7 +19,7 @@ function RandomDate() {
   const fetchData = async () => {
     const collectionRef = collection(fire, 'form');
     const querySnapshot = await getDocs(collectionRef);
-    const data = querySnapshot.docs.map((doc) => doc.data());
+    const data = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     return data;
   };
 
@@ -33,6 +37,20 @@ function RandomDate() {
     });
   }, []);
 
+  // Function to show a toast notification for successful submission
+  const showSuccessToast = () => {
+    toast.success('Your request has been sent successfully!', {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 3000,
+      hideProgressBar: false,
+    });
+  };
+
+  // Function to generate a unique share link based on the unique ID
+  const generateShareLink = (id) => {
+    return `https://demo-lyart-six.vercel.app/share/${id}`;
+  };
+
   const handleRandomButtonClick = () => {
     fetchData().then((data) => {
       setRandomData(data);
@@ -41,6 +59,10 @@ function RandomDate() {
 
   const handleEnterNewIdeasClick = () => {
     setShowForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setShowForm(false);
   };
 
   const handleSubmit = async (event) => {
@@ -55,17 +77,19 @@ function RandomDate() {
       // Get a reference to the Firestore collection
       const collectionRef = collection(fire, 'pending');
 
-      // Post the first entry to Firestore
-      await addDoc(collectionRef, {
+      // Post the entry to Firestore
+      const docRef = await addDoc(collectionRef, {
         head: head,
         shortDescription: shortDescription,
       });
 
-      // Reset the form and close the modal
-      setHead('');
-      setShortDescription('');
-      setShowForm(false);
+      // Generate the share link with the unique ID and set it to the clipboard
+      const shareLink = generateShareLink(docRef.id);
       setFormSubmitted(true);
+
+      // Show the success toast
+      showSuccessToast();
+
       console.log('Form submitted successfully!');
     } catch (error) {
       console.error('Error adding document: ', error);
@@ -73,42 +97,68 @@ function RandomDate() {
   };
 
   return (
-    <div className="App">
-      <h1>{randomHead}</h1>
-      <p>{randomShortDescription}</p>
-      <button onClick={handleRandomButtonClick}>Random Button</button>
-      <p>
-        <a href="#!" onClick={handleEnterNewIdeasClick}>
-          Enter New Ideas
-        </a>
-      </p>
-
-      {showForm && (
-        <div className="modal">
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="heading">Heading:</label>
-              <input
-                type="text"
-                id="heading"
-                value={head}
-                onChange={(e) => setHead(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="description">Description:</label>
-              <textarea
-                id="description"
-                value={shortDescription}
-                onChange={(e) => setShortDescription(e.target.value)}
-              />
-            </div>
-            <div>
-              <button type="submit">Submit</button>
-            </div>
-          </form>
+    <div>
+      <Navbar expand="lg">
+        <Container>
+          <Navbar.Brand>
+            <img
+              src={logo}
+              style={{ marginTop: '-30px' }}
+              width="160"
+              height="160"
+              className="d-inline-block align-top"
+              alt="Your Logo"
+            />
+          </Navbar.Brand>
+        </Container>
+      </Navbar>
+      <div className='DateApp'>
+        <div className="App">
+          <h1 className='heading'>{randomHead}</h1>
+          <p className='description'>{randomShortDescription}</p>
+          <div className='button'>
+            <Button variant='secondary' onClick={handleRandomButtonClick}>
+              Random Button
+            </Button>
+            <Button variant='primary' onClick={handleEnterNewIdeasClick}>
+              Enter New Ideas
+            </Button>
+            {/* Add the share button */}
+            {formSubmitted && (
+              <Button variant='success' onClick={() => {navigator.clipboard.writeText(generateShareLink())}}>
+                Share Link
+              </Button>
+            )}
+          </div>
+          <Modal show={showForm} onHide={handleCloseForm}>
+            <Modal.Header closeButton>
+              <Modal.Title>Enter New Ideas</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form onSubmit={handleSubmit}>
+                <Form.Group controlId="heading">
+                  <Form.Label>Title:</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={head}
+                    onChange={(e) => setHead(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group controlId="description">
+                  <Form.Label>Description:</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    value={shortDescription}
+                    onChange={(e) => setShortDescription(e.target.value)}
+                  />
+                </Form.Group>
+                <Button type="submit">Submit</Button>
+              </Form>
+            </Modal.Body>
+          </Modal>
         </div>
-      )}
+      </div>
+      <ToastContainer /> {/* Toast container for displaying toast notifications */}
     </div>
   );
 }
