@@ -13,7 +13,6 @@ function RandomDate() {
   const [shortDescription, setShortDescription] = useState('');
   const [randomHead, setRandomHead] = useState('');
   const [randomShortDescription, setRandomShortDescription] = useState('');
-  const [formSubmitted, setFormSubmitted] = useState(false);
 
   // Function to fetch data from Firestore
   const fetchData = async () => {
@@ -46,11 +45,6 @@ function RandomDate() {
     });
   };
 
-  // Function to generate a unique share link based on the unique ID
-  const generateShareLink = (id) => {
-    return `https://demo-lyart-six.vercel.app/share/${id}`;
-  };
-
   const handleRandomButtonClick = () => {
     fetchData().then((data) => {
       setRandomData(data);
@@ -70,22 +64,20 @@ function RandomDate() {
 
     try {
       // If the form is already submitted once, return without adding the second entry
-      if (formSubmitted) {
-        return;
-      }
-
+      // Note: The formSubmitted state is removed since there's no share functionality.
+      // If you need to add the form submission limitation, you can use other methods like local storage.
+      // Example: if (localStorage.getItem('formSubmitted')) { return; }
+      // And after successful form submission, set the localStorage item to indicate form submission.
+      // Example: localStorage.setItem('formSubmitted', true);
+      
       // Get a reference to the Firestore collection
       const collectionRef = collection(fire, 'pending');
 
       // Post the entry to Firestore
-      const docRef = await addDoc(collectionRef, {
+      await addDoc(collectionRef, {
         head: head,
         shortDescription: shortDescription,
       });
-
-      // Generate the share link with the unique ID and set it to the clipboard
-      const shareLink = generateShareLink(docRef.id);
-      setFormSubmitted(true);
 
       // Show the success toast
       showSuccessToast();
@@ -123,12 +115,6 @@ function RandomDate() {
             <Button variant='primary' onClick={handleEnterNewIdeasClick}>
               Enter New Ideas
             </Button>
-            {/* Add the share button */}
-            {formSubmitted && (
-              <Button variant='success' onClick={() => {navigator.clipboard.writeText(generateShareLink())}}>
-                Share Link
-              </Button>
-            )}
           </div>
           <Modal show={showForm} onHide={handleCloseForm}>
             <Modal.Header closeButton>
